@@ -1,0 +1,4 @@
+# Innehållet i data-mappen för inte följa me
+data/*
+!data/.gitkeep
+
