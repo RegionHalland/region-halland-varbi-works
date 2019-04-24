@@ -56,5 +56,12 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.2.0
+- Ändrat sökväg till datafiler
+- Lagt till footer i enskilt jobb
+
+### 1.1.0
+- Lagt till datafiler
+
 ### 1.0.0
 - Första version

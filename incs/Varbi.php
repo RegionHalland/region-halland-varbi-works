@@ -67,6 +67,7 @@ class Varbi
                 $myPosition['hours'] = $data['hours'];  
                 $myPosition['type'] = $data['type'];    
                 $myPosition['description'] = $data['description'];  
+                $myPosition['footer'] = $data['descs']['footer'];  
                 $myPosition['working_hours'] = $data['working_hours'];
                 $myPosition['applyURI'] = $data['applyURI'];
                 
