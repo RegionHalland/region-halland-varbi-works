@@ -56,6 +56,9 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.2.1
+- Justerat så att endast externa jobb visas
+
 ### 1.2.0
 - Ändrat sökväg till datafiler
 - Lagt till footer i enskilt jobb

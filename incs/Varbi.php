@@ -17,7 +17,12 @@ class Varbi
         // Variabler för url till Varbi
         $myFeed = env('VARBI_PROD_FEED');
         $myToken = env('VARBI_TOKEN');
-        $myPath = $myFeed . "?token=" . $myToken; 
+        
+        // Jobb
+        $myPath = $myFeed; 
+        
+        // Jobb + interna jobb
+        //$myPath = $myFeed . "?token=" . $myToken;
         
         // Idag
         $today = date("Y-m-d");
