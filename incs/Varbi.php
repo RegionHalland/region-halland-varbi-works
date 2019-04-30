@@ -152,6 +152,7 @@ class Varbi
                     $myPosition['hours'] = $data['hours'];  
                     $myPosition['type'] = $data['type'];    
                     $myPosition['description'] = $data['description'];  
+                    $myPosition['footer'] = $data['descs']['footer'];  
                     $myPosition['working_hours'] = $data['working_hours'];
                     $myPosition['applyURI'] = $data['applyURI'];
                 
@@ -163,7 +164,16 @@ class Varbi
                     array_push($myPositionLista, array(
                         'id' => $data['id'],
                         'name' => $data['name'],
-                        'title' => $data['title']
+                        'title' => $data['title'],
+                        'town' => $data['town'],
+                        'country' => $data['country'],
+                        'published' => $data['published'],
+                        'lastday' => $data['ends'],
+                        'ref_no' => $data['ref_nr'],
+                        'hours' => $data['hours'],
+                        'type' => $data['type'],
+                        'working_hours' => $data['working_hours'],
+                        'applyURI' => $data['applyURI']
                     ));
 
                 }

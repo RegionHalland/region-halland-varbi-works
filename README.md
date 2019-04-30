@@ -56,6 +56,9 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.2.2
+- Justerat fel variabler vid uppdaterad fil
+
 ### 1.2.1
 - Justerat så att endast externa jobb visas
 
