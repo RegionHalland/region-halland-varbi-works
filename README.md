@@ -56,6 +56,9 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.3.0
+- Tagit bort post_type, använder en template istället
+
 ### 1.2.2
 - Justerat fel variabler vid uppdaterad fil
 
