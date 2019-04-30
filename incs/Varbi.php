@@ -75,6 +75,10 @@ class Varbi
                 $myPosition['footer'] = $data['descs']['footer'];  
                 $myPosition['working_hours'] = $data['working_hours'];
                 $myPosition['applyURI'] = $data['applyURI'];
+                $myPosition['admission'] = $data['admission'];
+                $myPosition['pay'] = $data['pay'];
+                $myPosition['nr_pos'] = $data['nr_pos'];
+                $myPosition['county'] = $data['county'];
                 
                 $myPositionEnskildPath = ENV("VARBI_DATA_PATH") . "varbi_". $data['id'] .".txt";
                 $myPositionEnskildFile = fopen($myPositionEnskildPath, "w");
@@ -155,6 +159,10 @@ class Varbi
                     $myPosition['footer'] = $data['descs']['footer'];  
                     $myPosition['working_hours'] = $data['working_hours'];
                     $myPosition['applyURI'] = $data['applyURI'];
+                    $myPosition['admission'] = $data['admission'];
+                    $myPosition['pay'] = $data['pay'];
+                    $myPosition['nr_pos'] = $data['nr_pos'];
+                    $myPosition['county'] = $data['county'];
                 
                     $myPositionEnskildPath = ENV("VARBI_DATA_PATH") . "varbi_". $data['id'] .".txt";
                     $myPositionEnskildFile = fopen($myPositionEnskildPath, "w");

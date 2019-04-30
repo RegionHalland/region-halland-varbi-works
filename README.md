@@ -56,6 +56,9 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.3.1
+- Lagt till fält som fattades
+
 ### 1.3.0
 - Tagit bort post_type, använder en template istället
 
