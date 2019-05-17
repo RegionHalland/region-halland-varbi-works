@@ -56,6 +56,10 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.4.0
+- Lagt till filtrering av poster
+- Lagt till kontakt + facklig representat på en enskild sida
+
 ### 1.3.1
 - Lagt till fält som fattades
 

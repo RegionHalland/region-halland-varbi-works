@@ -24,179 +24,237 @@ class Varbi
         // Jobb + interna jobb
         //$myPath = $myFeed . "?token=" . $myToken;
         
-        // Idag
-        $today = date("Y-m-d");
-		
-        // Url till Varbi komplett array
-        $strVarbiFilePath = ENV("VARBI_DATA_PATH") . "varbi_komplett.txt";
+        // Hämta data från Varbi        
+        $arrData = file_get_contents($myPath);
+
+        // Decoda data till rätt json-format
+        $arrDecodedData = json_decode($arrData, true);
         
-        // Kolla om fil finns
-        $varbiFleExist = file_exists($strVarbiFilePath);
-        
+        //echo "<pre>";
+        //print_r($arrDecodedData);
+        //echo "<pre>";
+        //die();
 
-        if (!$varbiFleExist){
-        	
-            // Hämta data från Varbi		
-            $arrData = file_get_contents($myPath);
+        $myPositionLista = array();
+        $myPosition = array();
+        $myPositionMunicipality = array();
+        $myPositionJobtypeName = array();
+        $myPositionJobtypeGroup = array();
+        $myPositionJobtypeField = array();
+        $myPositionJobtypeFieldGroup = array();
+        $myMunicipalityString = "";
+        $myMunicipalityCheckString = "x";
+        $myJobtypeNameString = "";
+        $myJobtypeNameCheckString = "x";
+        $myJobtypeFieldString = "";
+        $myJobtypeFieldCheckString = "x";
+        $myJobtypeGroupString = "";
+        $myJobtypeGroupCheckString = "x";
+        $myJobtypeFieldGroupString = "";
+        $myJobtypeFieldGroupCheckString = "x";
 
-            // Decoda data till rätt json-format
-            $arrDecodedData = json_decode($arrData, true);
-
-            // Skapa fil
-            $myVarbiFile = fopen($strVarbiFilePath, "w");
-
-            // Skapa en ny array med token & expire
-            $mySaveVarbi = array();
-            $mySaveVarbi['data'] = $arrDecodedData;
-            $mySaveVarbi['today'] = $today;
-
-            $mySerializedSaveVarbi = serialize($mySaveVarbi);
+        foreach ($arrDecodedData['positions'] as $data) {
             
-            // Spara biljett i fil
-            fwrite($myVarbiFile, $mySerializedSaveVarbi);
-
-            $myPositionLista = array();
-            $myPosition = array();
+            // Data för varje enskilt jobb
+            $myPosition['id'] = $data['id'];    
+            $myPosition['name'] = $data['name'];    
+            $myPosition['title'] = $data['title'];  
+            $myPosition['town'] = $data['town'];    
+            $myPosition['country'] = $data['country'];  
+            $myPosition['published'] = $data['published'];  
+            $myPosition['lastday'] = $data['ends']; 
+            $myPosition['ref_no'] = $data['ref_nr'];    
+            $myPosition['hours'] = $data['hours'];  
+            $myPosition['type'] = $data['type'];    
+            $myPosition['description'] = $data['description'];  
+            $myPosition['footer'] = $data['descs']['footer'];  
+            $myPosition['working_hours'] = $data['working_hours'];
+            $myPosition['applyURI'] = $data['applyURI'];
+            $myPosition['admission'] = $data['admission'];
+            $myPosition['pay'] = $data['pay'];
+            $myPosition['nr_pos'] = $data['nr_pos'];
+            $myPosition['county'] = $data['county'];
+            $myPosition['kontakt'] = $data['position_contact'];
+            $myPosition['facket'] = $data['union_representative'];
+            //$myPosition['kontakt_namn'] = $data['position_contact']['0']['0'];
+            //$myPosition['kontakt_telefon'] = $data['position_contact']['0']['2'];
+            //$myPosition['facket_namn'] = $data['union_representative']['0']['0'];
+            //$myPosition['facket_telefon'] = $data['union_representative']['0']['2'];
             
-            foreach ($arrDecodedData['positions'] as $data) {
-                
-                // Data för varje enskilt jobb
-                $myPosition['id'] = $data['id'];    
-                $myPosition['name'] = $data['name'];    
-                $myPosition['title'] = $data['title'];  
-                $myPosition['town'] = $data['town'];    
-                $myPosition['country'] = $data['country'];  
-                $myPosition['published'] = $data['published'];  
-                $myPosition['lastday'] = $data['ends']; 
-                $myPosition['ref_no'] = $data['ref_nr'];    
-                $myPosition['hours'] = $data['hours'];  
-                $myPosition['type'] = $data['type'];    
-                $myPosition['description'] = $data['description'];  
-                $myPosition['footer'] = $data['descs']['footer'];  
-                $myPosition['working_hours'] = $data['working_hours'];
-                $myPosition['applyURI'] = $data['applyURI'];
-                $myPosition['admission'] = $data['admission'];
-                $myPosition['pay'] = $data['pay'];
-                $myPosition['nr_pos'] = $data['nr_pos'];
-                $myPosition['county'] = $data['county'];
-                
-                $myPositionEnskildPath = ENV("VARBI_DATA_PATH") . "varbi_". $data['id'] .".txt";
-                $myPositionEnskildFile = fopen($myPositionEnskildPath, "w");
-                $mySerializedPositionEnskild = serialize($myPosition);
-                fwrite($myPositionEnskildFile, $mySerializedPositionEnskild);
-                
-                array_push($myPositionLista, array(
-                    'id' => $data['id'],
-                    'name' => $data['name'],
-                    'title' => $data['title'],
-                    'town' => $data['town'],
-                    'country' => $data['country'],
-                    'published' => $data['published'],
-                    'lastday' => $data['ends'],
-                    'ref_no' => $data['ref_nr'],
-                    'hours' => $data['hours'],
-                    'type' => $data['type'],
-                    'working_hours' => $data['working_hours'],
-                    'applyURI' => $data['applyURI']
+            $myPositionEnskildPath = ENV("VARBI_DATA_PATH") . "varbi_". $data['id'] .".txt";
+            $myPositionEnskildFile = fopen($myPositionEnskildPath, "w");
+            $mySerializedPositionEnskild = serialize($myPosition);
+            fwrite($myPositionEnskildFile, $mySerializedPositionEnskild);
+            
+            array_push($myPositionLista, array(
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'town' => $data['town'],
+                'type' => $data['type'],
+                'working_hours' => $data['working_hours'],
+                'published' => $data['published'],
+                'lastday' => $data['ends'],
+                'kommun_id' => $data['codes']['municipality'],
+                'group_id' => $data['jobtype']['groupid'],
+                'group_name' => $data['jobtype']['group'],
+                'field_id' => $data['jobtype']['fieldid'],
+                'field_name' => $data['jobtype']['field']
+            ));
+
+            // Skapa array för kommuner med ID
+            $myMunicipalityID = $data['codes']['municipality'];
+            $myMunicipalityName = $this->region_halland_varbi_works_get_municipality_name($myMunicipalityID);
+            $myMunicipalityCheck = "," . $myMunicipalityID . ",";
+            $myMunicipalityPos = strpos($myMunicipalityCheckString,$myMunicipalityCheck);
+            if (is_numeric($myMunicipalityPos) == 1) {
+                $myMunicipalityUnique = 0;
+            } else {
+                $myMunicipalityUnique = 1;
+            }
+            if ($myMunicipalityUnique == 1) {
+                array_push($myPositionMunicipality, array(
+                    'id' => $myMunicipalityID,
+                    'name' => $myMunicipalityName
                 ));
-
             }
-            
-            $myPositionListaPath = ENV("VARBI_DATA_PATH") . "varbi_lista.txt";
-            $myPositionListaFile = fopen($myPositionListaPath, "w");
-            $mySerializedPositionLista = serialize($myPositionLista);
-            fwrite($myPositionListaFile, $mySerializedPositionLista);
-		
-        } else {
-        	
-            // Öppna filen
-            $myVarbiFile = fopen($strVarbiFilePath, "r");
-
-            // Läs innehåll
-            $myVarbiFileContent = fread($myVarbiFile,filesize($strVarbiFilePath));
-
-            // Unserializera filens innehåll
-            $mySerializedVarbiFileContent = unserialize($myVarbiFileContent);
-
-            if ($today != $mySerializedVarbiFileContent['today']) {
-
-                // Hämta data från Varbi        
-                $arrData = file_get_contents($myPath);
-
-                // Decoda data till rätt json-format
-                $arrDecodedData = json_decode($arrData, true);
-
-                // Skapa fil
-                $myVarbiFile = fopen($strVarbiFilePath, "w");
-
-                // Skapa en ny array med token & expire
-                $mySaveVarbi = array();
-                $mySaveVarbi['data'] = $arrDecodedData;
-                $mySaveVarbi['today'] = $today;
-
-                $mySerializedSaveVarbi = serialize($mySaveVarbi);
-            
-                // Spara biljett i fil
-                fwrite($myVarbiFile, $mySerializedSaveVarbi);
-
-                $myPositionLista = array();
-                $myPosition = array();
-            
-                foreach ($arrDecodedData['positions'] as $data) {
-                
-                    // Data för varje enskilt jobb
-                    $myPosition['id'] = $data['id'];    
-                    $myPosition['name'] = $data['name'];    
-                    $myPosition['title'] = $data['title'];  
-                    $myPosition['town'] = $data['town'];    
-                    $myPosition['country'] = $data['country'];  
-                    $myPosition['published'] = $data['published'];  
-                    $myPosition['lastday'] = $data['ends']; 
-                    $myPosition['ref_no'] = $data['ref_nr'];    
-                    $myPosition['hours'] = $data['hours'];  
-                    $myPosition['type'] = $data['type'];    
-                    $myPosition['description'] = $data['description'];  
-                    $myPosition['footer'] = $data['descs']['footer'];  
-                    $myPosition['working_hours'] = $data['working_hours'];
-                    $myPosition['applyURI'] = $data['applyURI'];
-                    $myPosition['admission'] = $data['admission'];
-                    $myPosition['pay'] = $data['pay'];
-                    $myPosition['nr_pos'] = $data['nr_pos'];
-                    $myPosition['county'] = $data['county'];
-                
-                    $myPositionEnskildPath = ENV("VARBI_DATA_PATH") . "varbi_". $data['id'] .".txt";
-                    $myPositionEnskildFile = fopen($myPositionEnskildPath, "w");
-                    $mySerializedPositionEnskild = serialize($myPosition);
-                    fwrite($myPositionEnskildFile, $mySerializedPositionEnskild);
-                
-                    array_push($myPositionLista, array(
-                        'id' => $data['id'],
-                        'name' => $data['name'],
-                        'title' => $data['title'],
-                        'town' => $data['town'],
-                        'country' => $data['country'],
-                        'published' => $data['published'],
-                        'lastday' => $data['ends'],
-                        'ref_no' => $data['ref_nr'],
-                        'hours' => $data['hours'],
-                        'type' => $data['type'],
-                        'working_hours' => $data['working_hours'],
-                        'applyURI' => $data['applyURI']
-                    ));
-
-                }
-            
-                $myPositionListaPath = ENV("VARBI_DATA_PATH") . "varbi_lista.txt";
-                $myPositionListaFile = fopen($myPositionListaPath, "w");
-                $mySerializedPositionLista = serialize($myPositionLista);
-                fwrite($myPositionListaFile, $mySerializedPositionLista);
-
+            $myMunicipalityString = $myMunicipalityString . "," . $myMunicipalityID;
+            $myMunicipalityCheckString = $myMunicipalityString . ",";
+                        
+            // Skapa array för jobtype field med ID
+            $myJobtypeFieldID = $data['jobtype']['fieldid'];
+            $myJobtypeField = $data['jobtype']['field'];
+            $myJobtypeFieldCheck = "," . $myJobtypeFieldID . ",";
+            $myJobtypeFieldPos = strpos($myJobtypeFieldCheckString,$myJobtypeFieldCheck);
+            if (is_numeric($myJobtypeFieldPos) == 1) {
+                $myJobtypeFieldUnique = 0;
+            } else {
+                $myJobtypeFieldUnique = 1;
             }
+            if ($myJobtypeFieldUnique == 1) {
+                array_push($myPositionJobtypeField, array(
+                    'id' => $myJobtypeFieldID,
+                    'name' => $myJobtypeField
+                ));
+            }
+            $myJobtypeFieldString = $myJobtypeFieldString . "," . $myJobtypeFieldID;
+            $myJobtypeFieldCheckString = $myJobtypeFieldString . ",";
+
+            // Skapa array för jobtype group med ID
+            $myJobtypeGroupID = $data['jobtype']['groupid'];
+            $myJobtypeGroup = $data['jobtype']['group'];
+            $myJobtypeGroupCheck = "," . $myJobtypeGroupID . ",";
+            $myJobtypeGroupPos = strpos($myJobtypeGroupCheckString,$myJobtypeGroupCheck);
+            if (is_numeric($myJobtypeGroupPos) == 1) {
+                $myJobtypeGroupUnique = 0;
+            } else {
+                $myJobtypeGroupUnique = 1;
+            }
+            if ($myJobtypeGroupUnique == 1) {
+                array_push($myPositionJobtypeGroup, array(
+                    'id' => $myJobtypeGroupID,
+                    'name' => $myJobtypeGroup
+                ));
+            }
+            $myJobtypeGroupString = $myJobtypeGroupString . "," . $myJobtypeGroupID;
+            $myJobtypeGroupCheckString = $myJobtypeGroupString . ",";
+            
+            // Skapa array för jobtype field-group med ID
+            $myJobtypeFieldIDConcat = $data['jobtype']['fieldid'];
+            $myJobtypeFieldConcat = $data['jobtype']['field'];
+            $myJobtypeGroupIDConcat = $data['jobtype']['groupid'];
+            $myJobtypeGroupConcat = $data['jobtype']['group'];
+            $myJobtypeFieldGroupCheck = "," . $myJobtypeFieldIDConcat . "-" . $myJobtypeGroupIDConcat . ",";
+            $myJobtypeFielGroupdPos = strpos($myJobtypeFieldGroupCheckString,$myJobtypeFieldGroupCheck);
+            if (is_numeric($myJobtypeFielGroupdPos) == 1) {
+                $myJobtypeFieldGroupUnique = 0;
+            } else {
+                $myJobtypeFieldGroupUnique = 1;
+            }
+            if ($myJobtypeFieldGroupUnique == 1) {
+                array_push($myPositionJobtypeFieldGroup, array(
+                    'field_id' => $myJobtypeFieldIDConcat,
+                    'group_id' => $myJobtypeGroupIDConcat,
+                    'id_concat' => $myJobtypeFieldIDConcat . "-" . $myJobtypeGroupIDConcat,
+                    'field_name' => $myJobtypeFieldConcat,
+                    'group_name' => $myJobtypeGroupConcat                        
+                ));
+            }
+            $myJobtypeFieldGroupString = $myJobtypeFieldGroupString . "," . $myJobtypeFieldIDConcat . "-" . $myJobtypeGroupIDConcat;
+            $myJobtypeFieldGroupCheckString = $myJobtypeFieldGroupString . ",";
 
         }
+
+        // Spara array för kommuner med ID som en serialiserad array
+        $myPositionMunicipalityPath = ENV("VARBI_DATA_PATH") . "dropdown/varbi_kommun_0_0_0.txt";
+        $myPositionMunicipalityFile = fopen($myPositionMunicipalityPath, "w");
+        $mySerializedPositionMunicipality = serialize($myPositionMunicipality);
+        fwrite($myPositionMunicipalityFile, $mySerializedPositionMunicipality);
+        
+        // Spara array för jobtype field med ID som en serialiserad array
+        $myPositionJobtypeFieldPath = ENV("VARBI_DATA_PATH") . "dropdown/varbi_jobtype_field_0_0_0.txt";
+        $myPositionJobtypeFieldFile = fopen($myPositionJobtypeFieldPath, "w");
+        $mySerializedPositionJobtypeField = serialize($myPositionJobtypeField);
+        fwrite($myPositionJobtypeFieldFile, $mySerializedPositionJobtypeField);
+
+        // Spara array för jobtype group med ID som en serialiserad array
+        $myPositionJobtypeGroupPath = ENV("VARBI_DATA_PATH") . "dropdown/varbi_jobtype_group_0_0_0.txt";
+        $myPositionJobtypeGroupFile = fopen($myPositionJobtypeGroupPath, "w");
+        $mySerializedPositionJobtypeGroup = serialize($myPositionJobtypeGroup);
+        fwrite($myPositionJobtypeGroupFile, $mySerializedPositionJobtypeGroup);
+
+        // Spara array för jobtype field med ID som en serialiserad array
+        $myPositionJobtypeFieldGroupPath = ENV("VARBI_DATA_PATH") . "dropdown/varbi_jobtype_field_group_0_0_0.txt";
+        $myPositionJobtypeFieldGroupFile = fopen($myPositionJobtypeFieldGroupPath, "w");
+        $mySerializedPositionJobtypeFieldGroup = serialize($myPositionJobtypeFieldGroup);
+        fwrite($myPositionJobtypeFieldGroupFile, $mySerializedPositionJobtypeFieldGroup);
+
+        $myPositionListaPath = ENV("VARBI_DATA_PATH") . "varbi_lista.txt";
+        $myPositionListaFile = fopen($myPositionListaPath, "w");
+        $mySerializedPositionLista = serialize($myPositionLista);
+        fwrite($myPositionListaFile, $mySerializedPositionLista);
+    
+        // Byta statts för att skapa om filter-listorna
+        $myFilterVarbi = array();
+        $myFilterVarbi['update'] = 1;
+        $myPositionFilterPath = ENV("VARBI_DATA_PATH") . "varbi_filter.txt";
+        $myPositionFilterFile = fopen($myPositionFilterPath, "w");
+        $mySerializedPositionFilter = serialize($myFilterVarbi);
+        fwrite($myPositionFilterFile, $mySerializedPositionFilter);
 
         return "OK!";
 	
 	}
+
+    // Första bokstaven som nummer
+    private function region_halland_varbi_works_get_municipality_name($id) {
+        switch ($id) {
+             case '1279':
+                 $strKommunName = "Båstad";
+                 break;
+             case '1315':
+                 $strKommunName = "Hylte";
+                 break;
+             case '1380':
+                 $strKommunName = "Halmstad";
+                 break;
+             case '1381':
+                 $strKommunName = "Laholm";
+                 break;
+             case '1382':
+                 $strKommunName = "Falkenberg";
+                 break;
+             case '1383':
+                 $strKommunName = "Varberg";
+                 break;
+             case '1384':
+                 $strKommunName = "Kungsbacka";
+                 break;
+             default:
+                 $strKommunName = "N/A";
+         }
+
+         // Returnera namn på kommun
+         return $strKommunName;
+    }
 
 }
