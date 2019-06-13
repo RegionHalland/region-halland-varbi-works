@@ -6,7 +6,7 @@
 	/*
 	Plugin Name: Region Halland Varbi Works
 	Description: Front-end-plugin som returnerar lediga jobb från Varbi
-	Version: 1.4.1
+	Version: 1.5.0
 	Author: Roland Hydén
 	License: MIT
 	Text Domain: regionhalland

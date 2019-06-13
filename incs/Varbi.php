@@ -208,6 +208,10 @@ class Varbi
         $mySerializedPositionJobtypeFieldGroup = serialize($myPositionJobtypeFieldGroup);
         fwrite($myPositionJobtypeFieldGroupFile, $mySerializedPositionJobtypeFieldGroup);
 
+        // Sortera om arrayen efter senast publicerad
+        usort($myPositionLista, 'static::region_halland_varbi_sort_by_published');
+        
+        // Spara listan
         $myPositionListaPath = ENV("VARBI_DATA_PATH") . "varbi_lista.txt";
         $myPositionListaFile = fopen($myPositionListaPath, "w");
         $mySerializedPositionLista = serialize($myPositionLista);
@@ -224,6 +228,10 @@ class Varbi
         return "OK!";
 	
 	}
+
+    public static function region_halland_varbi_sort_by_published($a, $b) {
+        return strcmp($b['published'],$a['published']);
+    }
 
     // Första bokstaven som nummer
     private function region_halland_varbi_works_get_municipality_name($id) {

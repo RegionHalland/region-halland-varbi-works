@@ -56,6 +56,9 @@ OBS! Justera så att du hämtar aktuell version.
 
 ## Versionhistorik
 
+### 1.5.0
+- Justerat om alla listor edter publicerat datum, nyast först
+
 ### 1.4.0
 - Lagt till filtrering av poster
 - Lagt till kontakt + facklig representat på en enskild sida
