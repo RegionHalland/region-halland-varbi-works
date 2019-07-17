@@ -13,6 +13,14 @@ Denna plugin skapar funktionalitet för att hämta lediga jobb från Varbi
 Notera att denna plugin innehåller bara grundfunktionalitet utan tillhörande token-nycklar
 ```
 
+## Licensmodell
+
+Denna plugin använder licensmodell GPL-3.0. Du kan läsa mer om denna licensmodell via den medföljande filen:
+```sh
+LICENSE (https://github.com/RegionHalland/region-halland-varbi-works/blob/master/LICENSE)
+```
+
+
 ## Installation och aktivering
 
 ```sh
@@ -55,6 +63,10 @@ OBS! Justera så att du hämtar aktuell version.
 
 
 ## Versionhistorik
+
+### 1.6.0
+- Uppdaterat med information om licensmodell
+- Bifogat fil med licensmodell
 
 ### 1.5.0
 - Justerat om alla listor edter publicerat datum, nyast först
